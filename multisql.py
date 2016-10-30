@@ -13,6 +13,7 @@ import psycopg2.extras
 
 COLORS = {'red': 31, 'green': 32, 'yellow': 33, 'blue': 34}
 
+
 class App(object):
     """
     Application class
@@ -90,5 +91,5 @@ class App(object):
 
 
 if __name__ == "__main__":
-    application = App()
-    sys.exit(application.run())
+    APPLICATION = App()
+    sys.exit(APPLICATION.run())
