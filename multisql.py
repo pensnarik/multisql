@@ -31,6 +31,7 @@ class App(object):
 
     @staticmethod
     def with_color(color, string):
+        "Prints message colorized"
         if isinstance(color, str):
             color = COLORS.get(color, 39)
         else:
