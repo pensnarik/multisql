@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 # -*- encoding: utf-8 -*-
 """
 Execute SQL on multiple servers
@@ -10,6 +11,7 @@ import argparse
 import psycopg2
 import psycopg2.extras
 
+COLORS = {'red': 31, 'green': 32, 'yellow': 33, 'blue': 34}
 
 class App(object):
     """
@@ -25,6 +27,14 @@ class App(object):
         del parser
         self.sql = None
         self.config = None
+
+    @staticmethod
+    def with_color(color, string):
+        if isinstance(color, str):
+            color = COLORS.get(color, 39)
+        else:
+            color = color
+        return "\x1b[%dm%s\x1b[0m" % (color, string)
 
     def load_config(self):
         "Load config from .multisqlrc"
@@ -49,9 +59,15 @@ class App(object):
         try:
             cursor.execute(self.sql)
         except psycopg2.InternalError as err:
-            print('Could not execute statement: %s' % str(err))
-        for row in cursor.fetchall():
-            print(row)
+            print(App.with_color('red', 'Could not execute statement: %s' % str(err).strip()))
+        except psycopg2.DataError as err:
+            print(App.with_color('red', 'Data error: %s' % str(err).strip()))
+
+        if cursor.rowcount <= 0:
+            print(App.with_color('green', '<EMPTY SET>'))
+        else:
+            for row in cursor.fetchall():
+                print(App.with_color('green', row))
 
         cursor.close()
         conn.close()
