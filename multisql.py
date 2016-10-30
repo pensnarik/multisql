@@ -1,8 +1,7 @@
-#!/usr/bin/env python3
+# -*- encoding: utf-8 -*-
 """
 Execute SQL on multiple servers
 """
-# -*- encoding: utf-8 -*-
 import os
 import sys
 import json
@@ -75,5 +74,5 @@ class App(object):
 
 
 if __name__ == "__main__":
-    app = App()
-    sys.exit(app.run())
+    application = App()
+    sys.exit(application.run())
