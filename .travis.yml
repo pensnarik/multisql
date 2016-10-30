@@ -7,5 +7,6 @@ python:
 install:
   - pip install -r requirements.txt
   - pip install pylint
+  - python setup.py istall
 # command to run tests
-script: "nosetests && pylint"
+script: "nosetests && pylint *.py"
