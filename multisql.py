@@ -1,15 +1,15 @@
 #!/usr/bin/env python3
-#! -*- encoding: utf-8 -*-
 """
 Execute SQL on multiple servers
 """
+# -*- encoding: utf-8 -*-
 import os
 import sys
 import json
+import argparse
 
 import psycopg2
 import psycopg2.extras
-import argparse
 
 
 class App(object):
@@ -24,6 +24,8 @@ class App(object):
         parser.add_argument('--group', type=str, help='Server group name', required=True)
         self.args = parser.parse_args()
         del parser
+        self.sql = None
+        self.config = None
 
     def load_config(self):
         "Load config from .multisqlrc"
@@ -55,12 +57,13 @@ class App(object):
         cursor.close()
         conn.close()
 
-    def die(self, message=None):
+    @staticmethod
+    def die(message=None):
         "Print message and exit with code 1"
         print(message)
         sys.exit(1)
 
-    def run(self, argv):
+    def run(self):
         "Program entry point"
         self.load_config()
         self.load_sql()
@@ -73,4 +76,4 @@ class App(object):
 
 if __name__ == "__main__":
     app = App()
-    sys.exit(app.run(sys.argv))
+    sys.exit(app.run())
