@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+# pylint: disable=C0111
 # -*- encoding: utf-8 -*-
 """
 Execute SQL on multiple servers
