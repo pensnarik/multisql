@@ -1,3 +1,6 @@
+"""
+Installation sctips
+"""
 from setuptools import setup
 
 setup(
