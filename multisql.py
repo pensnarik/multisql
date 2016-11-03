@@ -7,6 +7,7 @@ import os
 import sys
 import json
 import argparse
+import subprocess
 
 import psycopg2
 import psycopg2.extras
@@ -24,6 +25,7 @@ class App(object):
         parser = argparse.ArgumentParser(description='Execute SQL statements on multiple servers.')
         parser.add_argument('--file', type=str, help='File with SQL statements', required=True)
         parser.add_argument('--group', type=str, help='Server group name', required=True)
+        parser.add_argument('--use-psql', action='store_true', default=False)
         self.args = parser.parse_args()
         del parser
         self.sql = None
@@ -74,6 +76,17 @@ class App(object):
         cursor.close()
         conn.close()
 
+    def execute_psql(self, server):
+        "Invokes psql and passes file with SQL code to it"
+        command = ["psql", '%s' % server, '-f', '%s' % self.args.file]
+
+        process = subprocess.Popen(command,
+                                   stdout=subprocess.PIPE,
+                                   stderr=subprocess.PIPE)
+        out, err = process.communicate()
+        print(out.decode('utf-8'))
+        # print(err)
+
     @staticmethod
     def die(message=None):
         "Print message and exit with code 1"
@@ -88,7 +101,10 @@ class App(object):
             self.die('Group %s was not found' % self.args.group)
         for server in self.config[self.args.group]:
             print('Executing on server "%s"...' % server)
-            self.execute(server)
+            if self.args.use_psql is True:
+                self.execute_psql(server)
+            else:
+                self.execute(server)
 
 
 if __name__ == "__main__":
