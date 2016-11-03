@@ -83,9 +83,8 @@ class App(object):
         process = subprocess.Popen(command,
                                    stdout=subprocess.PIPE,
                                    stderr=subprocess.PIPE)
-        out, err = process.communicate()
+        out, _ = process.communicate()
         print(out.decode('utf-8'))
-        # print(err)
 
     @staticmethod
     def die(message=None):
